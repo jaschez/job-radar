@@ -1,0 +1,37 @@
+# Target companies. `ats: [provider, slug]` points at the company's public job board API;
+# companies without `ats` are checked by hand in the weekly manual check (if enabled).
+# Find slugs with tools/probe_ats.py. Fields beyond those the radar uses are free notes.
+- company: Grafana Labs
+  tier: A
+  active: true
+  ats: [greenhouse, grafanalabs]
+  careers: https://grafana.com/about/careers/open-positions/
+- company: Elastic
+  tier: A
+  active: true
+  ats: [greenhouse, elastic]
+  careers: https://jobs.elastic.co/
+- company: GitLab
+  tier: B
+  active: true
+  ats: [greenhouse, gitlab]
+  careers: https://about.gitlab.com/jobs/
+- company: Supabase
+  tier: B
+  active: true
+  ats: [ashby, supabase]
+  careers: https://supabase.com/careers
+- company: PostHog
+  tier: B
+  active: true
+  ats: [ashby, posthog]
+  careers: https://posthog.com/careers
+- company: Hugging Face
+  tier: C
+  active: true
+  ats: [workable, huggingface]
+  careers: https://huggingface.co/jobs
+- company: Example Co without an API
+  tier: C
+  active: false
+  careers: https://example.com/careers

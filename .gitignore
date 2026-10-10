@@ -1,0 +1,11 @@
+# Personal data lives in a workspace, never in the repository.
+/workspace/
+*.db
+secrets.env
+out/
+logs/
+.radar.lock
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,0 +1,4 @@
+# Companies to try before adding them to companies.yaml (tools/probe_ats.py).
+- {company: Temporal, guesses: [[greenhouse, temporaltechnologies], [ashby, temporal]]}
+- {company: ClickHouse, guesses: [[greenhouse, clickhouse]]}
+- {company: Sentry, guesses: [[ashby, sentry], [greenhouse, sentry]]}

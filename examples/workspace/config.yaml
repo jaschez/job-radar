@@ -1,0 +1,102 @@
+# Job radar: example workspace configuration.
+#
+# Copy this directory somewhere of your own (it will hold your history and personal data)
+# and point the radar at it:   export RADAR_WORKSPACE=~/my-job-radar
+# This example is a backend engineer based in Valencia (Spain) looking for remote work in
+# Europe, or relocation to a few cities. All patterns are regular expressions matched
+# against lowercased, accent-free text.
+
+language: en                 # e-mails and evaluation text: en | es
+timezone: Europe/Madrid
+weekly_review_day: 1         # 1 = Monday: weekly e-mail (and manual check, if enabled)
+user_agent_contact: null     # optional e-mail added to the User-Agent of ATS requests
+
+notify:
+  to: you@example.com
+  backend: smtp              # smtp | claude-gmail | file
+  smtp: {host: smtp.gmail.com, port: 587, from: you@example.com}
+
+evaluation:
+  backend: anthropic-api     # anthropic-api | claude-cli | none
+  model: claude-opus-5-5     # API model id; with claude-cli use an alias such as "sonnet"
+  max_per_day: 20
+  profile_file: profile.md   # the candidate profile the evaluator reads
+  # Hard rules that override everything else in the evaluation.
+  rules: |
+    - Minimum total compensation: 70,000 EUR/year. A published range whose maximum is below it: Reject.
+    - Prefers remote work. Relocation is accepted only to Amsterdam, Berlin or Dublin, and only pays
+      off with a strong fit: one priority below an equivalent remote role.
+    - Speaks English and Spanish; a posting that requires another language: Reject.
+    - EU citizen: no visa needed in the EU; anything requiring sponsorship outside the EU: Reject.
+
+links: []                    # [{label: My tracker, url: https://...}] shown in the e-mail footer
+weekly_reminder: null        # a line for the weekly e-mail, e.g. "Update the statuses in your tracker"
+
+geography:
+  include_relocation: true   # announce roles in relocation_ok places
+  include_pending: false     # other places that need a move: stored, not announced
+  home_city_patterns: ['\bvalencia\b']
+  accepted_city_patterns:    # a country without a city that forces a move
+    - '^(spain|espana)$'
+    - '^(spain|espana)\s*[,(/-]'
+  remote_ok_patterns:
+    - 'remote.*\b(spain|espana|es)\b'
+    - '\b(spain|espana)\b.*remote'
+    - 'remot[eo].*\b(emea|europe|eu|cet|anywhere|worldwide|global)\b'
+    - '\b(emea|europe|eu)\b.*remote'
+    - '^(remote|fully remote|anywhere|worldwide)$'
+  relocation_ok_patterns:
+    - '\b(amsterdam|berlin|dublin)\b'
+  pending_city_patterns:
+    - '\b(madrid|barcelona|lisbon|paris|munich|london)\b'
+  excluded_patterns:
+    - '\b(us|usa|united states|north america|americas|canada|latam|apac|asia|india|australia)\b'
+    - '\b(uk only|united kingdom only)\b'
+
+role_families:
+  - name: "Backend / Software Engineering"
+    active: true
+    priority: 1              # 1 adds the most to the pre-score
+    title_patterns:
+      - 'back[- ]?end'
+      - 'full[- ]?stack'
+      - 'software (engineer|developer)'
+      - '\b(python|go|golang|java|node(\.?js)?|typescript)\b.*(engineer|developer)'
+  - name: "Data / Platform"
+    active: true
+    priority: 2
+    title_patterns: ['data engineer', 'platform engineer', '\b(sre|site reliability)\b', 'devops']
+  - name: "Frontend"
+    active: false            # kept for later; inactive families are stored but not announced
+    priority: 3
+    title_patterns: ['front[- ]?end']
+
+exclusions:                  # matched against the title
+  - reason: "internship / student"
+    patterns: ['\bintern(ship)?\b', '\bstudent\b', 'trainee', 'apprentice', '\bgraduate\b']
+  - reason: "management or staff+"
+    patterns: ['\bstaff\b', '\bprincipal\b', '\bdirector\b', 'head of', '\bvp\b', '\bmanager\b']
+  - reason: "outside the profile"
+    patterns: ['\b(ios|android|mobile)\b', 'embedded', 'firmware', '\bqa\b', 'sdet']
+
+cooldowns: []                # [{company: X, since: 2026-06-24, until: 2026-12-24, note: "rejected after the screen"}]
+
+prescore:
+  penalized_title_words: [junior, entry]
+
+sources:
+  ats_boards:
+    companies_file: companies.yaml
+    workers: 12
+    providers: {}            # extra ATS providers: {my_ats: {path: plugins/my_ats.py}}
+  # my_board:
+  #   path: plugins/example_source.py
+  #   url: https://jobs.example.test/api/jobs
+
+manual_check:                # weekly check of companies without an API (needs claude-cli)
+  enabled: false
+  model: sonnet
+
+sheets:                      # EXPERIMENTAL Google Sheets sync (needs claude-cli + the Sheets connector)
+  enabled: false
+  id: null

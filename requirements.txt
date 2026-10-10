@@ -1,0 +1,6 @@
+requests>=2.31
+PyYAML>=6.0
+# Only for evaluation.backend: anthropic-api
+anthropic>=1.13
+# Only for tools/build_tracker.py
+openpyxl>=3.1
